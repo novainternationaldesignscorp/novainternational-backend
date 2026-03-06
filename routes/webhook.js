@@ -12,16 +12,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // GoDaddy SMTP transporter
 // ----------------------
 const transporter = nodemailer.createTransport({
-  host: "smtpout.secureserver.net",
-  port: 465,
-  secure: true,
+  host: "outlook.office365.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER, // info@novainternationaldesigns.com
+    user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
   logger: true,
   debug: true,
+  tls: {
+    ciphers: "SSLv3"
+  }
 });
+
 
 // Verify transporter connection
 transporter.verify((err, success) => {
