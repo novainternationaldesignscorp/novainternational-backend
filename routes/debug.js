@@ -12,6 +12,7 @@ router.get("/smtp-test", async (req, res) => {
         const { to } = req.query;
         const { EMAIL_USER, EMAIL_PASS, NODE_ENV } = process.env;
         const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
+        const SMTP_ALT_PORT = Number(process.env.SMTP_ALT_PORT || 465);
         const SMTP_HOST = process.env.SMTP_HOST || "smtp.office365.com";
         const SMTP_FALLBACK_HOST = process.env.SMTP_FALLBACK_HOST || "outlook.office365.com";
         const SMTP_EXTRA_FALLBACK_HOST =
@@ -28,14 +29,14 @@ router.get("/smtp-test", async (req, res) => {
             (host, index, arr) => host && arr.indexOf(host) === index
         );
 
-        const createTransport = (host) =>
+        const createTransport = (host, port) =>
             nodemailer.createTransport({
                 host,
-                port: SMTP_PORT,
-                secure: SMTP_PORT === 465,
-                requireTLS: SMTP_PORT !== 465,
+                port,
+                secure: port === 465,
+                requireTLS: port !== 465,
                 auth: { user: EMAIL_USER, pass: EMAIL_PASS },
-                tls: { minVersion: "TLSv1.2" },
+                tls: { minVersion: "TLSv1.2", servername: host },
                 connectionTimeout: 30000,
                 greetingTimeout: 20000,
                 socketTimeout: 30000,
@@ -44,18 +45,31 @@ router.get("/smtp-test", async (req, res) => {
 
         let transporter = null;
         let verifiedHost = null;
+        let verifiedPort = null;
         let lastVerifyError = null;
 
+        const profiles = [];
         for (const host of hosts) {
+            profiles.push({ host, port: SMTP_PORT });
+            if (SMTP_ALT_PORT && SMTP_ALT_PORT !== SMTP_PORT) {
+                profiles.push({ host, port: SMTP_ALT_PORT });
+            }
+        }
+
+        for (const profile of profiles) {
             try {
-                const candidate = createTransport(host);
+                const candidate = createTransport(profile.host, profile.port);
                 await candidate.verify();
                 transporter = candidate;
-                verifiedHost = host;
+                verifiedHost = profile.host;
+                verifiedPort = profile.port;
                 break;
             } catch (verifyErr) {
                 lastVerifyError = verifyErr;
-                console.warn(`[SMTP Test] verify failed for ${host}:`, verifyErr?.message);
+                console.warn(
+                    `[SMTP Test] verify failed for ${profile.host}:${profile.port}:`,
+                    verifyErr?.message
+                );
             }
         }
 
@@ -80,6 +94,7 @@ router.get("/smtp-test", async (req, res) => {
             ok: true,
             verified: true,
             host: verifiedHost,
+            port: verifiedPort,
             emailSent,
             message: emailSent
                 ? "SMTP verified and test email sent."

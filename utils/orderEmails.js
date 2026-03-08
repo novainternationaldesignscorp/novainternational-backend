@@ -9,6 +9,8 @@ const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
 const SMTP_EXTRA_FALLBACK_HOST =
     process.env.SMTP_EXTRA_FALLBACK_HOST || "smtp-mail.outlook.com";
 
+const SMTP_ALT_PORT = Number(process.env.SMTP_ALT_PORT || 465);
+
 function createTransport(host) {
     return nodemailer.createTransport({
         host,
@@ -25,6 +27,27 @@ function createTransport(host) {
         logger: true,
         tls: {
             minVersion: "TLSv1.2",
+        },
+    });
+}
+
+function createTransportWithPort(host, port) {
+    return nodemailer.createTransport({
+        host,
+        port,
+        secure: port === 465,
+        requireTLS: port !== 465,
+        connectionTimeout: 30000,
+        greetingTimeout: 20000,
+        socketTimeout: 30000,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+        logger: true,
+        tls: {
+            minVersion: "TLSv1.2",
+            servername: host,
         },
     });
 }
@@ -51,20 +74,28 @@ async function sendMailWithFallback(mailOptions) {
             throw err;
         }
 
-        const fallbackHosts = [SMTP_FALLBACK_HOST, SMTP_EXTRA_FALLBACK_HOST].filter(
-            (host) => host && host !== SMTP_HOST
+        const hostCandidates = [SMTP_HOST, SMTP_FALLBACK_HOST, SMTP_EXTRA_FALLBACK_HOST].filter(
+            (host, index, arr) => host && arr.indexOf(host) === index
         );
 
+        const profiles = [];
+        for (const host of hostCandidates) {
+            profiles.push({ host, port: SMTP_PORT });
+            if (SMTP_ALT_PORT && SMTP_ALT_PORT !== SMTP_PORT) {
+                profiles.push({ host, port: SMTP_ALT_PORT });
+            }
+        }
+
         let lastError = err;
-        for (const host of fallbackHosts) {
+        for (const profile of profiles) {
             try {
-                console.warn("[OrderEmail] SMTP timeout. Retrying with fallback host", {
+                console.warn("[OrderEmail] SMTP timeout. Retrying with Outlook profile", {
                     primaryHost: SMTP_HOST,
-                    retryHost: host,
-                    port: SMTP_PORT,
+                    retryHost: profile.host,
+                    retryPort: profile.port,
                 });
 
-                transporter = createTransport(host);
+                transporter = createTransportWithPort(profile.host, profile.port);
                 return await transporter.sendMail(mailOptions);
             } catch (retryErr) {
                 lastError = retryErr;
