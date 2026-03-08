@@ -119,10 +119,7 @@ app.use("/api/guests", guestRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/signup", signupRouter);
-
-if (process.env.DEBUG_SMTP_ENABLED === "true") {
-  app.use("/api/debug", debugRoutes);
-}
+app.use("/api/debug", debugRoutes);
 
 // HEALTH CHECK
 app.get("/health", (req, res) => {
