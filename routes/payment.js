@@ -1,9 +1,12 @@
 import express from "express";
 import Stripe from "stripe";
 import crypto from "crypto";
+import mongoose from "mongoose";
 import PurchaseOrder from "../models/PurchaseOrder.js";
+import PurchaseOrderDraft from "../models/PurchaseOrderDraft.js";
 import User from "../models/User.js";
 import Guest from "../models/Guest.js";
+import { sendOrderEmailsIfNeeded } from "../utils/orderEmails.js";
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -42,6 +45,121 @@ async function resolveCustomerEmail(order, ownerType, ownerId) {
   return undefined;
 }
 
+const toObjectId = (id) =>
+  mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : id;
+
+const buildFallbackPurchaseOrderId = (sessionId) => {
+  const tail = String(sessionId || "").slice(-8) || crypto.randomBytes(4).toString("hex");
+  return `PO-${Date.now()}-${tail}`;
+};
+
+const splitStripeLineItems = (lineItems = []) => {
+  const items = [];
+  let shippingCost = 0;
+  let estimatedTax = 0;
+
+  for (const li of lineItems) {
+    const label = String(li.description || "").trim();
+    const amount = Number(li.amount_total || li.amount_subtotal || 0) / 100;
+    const qty = Math.max(1, Number(li.quantity || 1));
+
+    if (label === "Shipping") {
+      shippingCost += amount;
+      continue;
+    }
+
+    if (label === "Estimated Tax") {
+      estimatedTax += amount;
+      continue;
+    }
+
+    const price = qty > 0 ? amount / qty : 0;
+    items.push({
+      description: label || "Product",
+      qty,
+      price,
+      total: amount,
+    });
+  }
+
+  const subtotal = items.reduce((sum, item) => sum + Number(item.total || 0), 0);
+  return { items, subtotal, shippingCost, estimatedTax };
+};
+
+async function resolveOwnerFromMetadata(metadata = {}) {
+  let ownerType = metadata.ownerType || null;
+  let ownerId = metadata.ownerId || null;
+
+  if ((!ownerType || !ownerId) && metadata.purchaseOrderId) {
+    const draft = await PurchaseOrderDraft.findOne({
+      purchaseOrderId: metadata.purchaseOrderId,
+    }).lean();
+
+    if (draft) {
+      ownerType = ownerType || draft.ownerType;
+      ownerId = ownerId || String(draft.ownerId);
+    }
+  }
+
+  return { ownerType, ownerId };
+}
+
+async function createOrderFromStripeSession(sessionId) {
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  if (!session) return null;
+
+  const existingBySession = await PurchaseOrder.findOne({ stripeSessionId: session.id });
+  if (existingBySession) return existingBySession;
+
+  const metadata = session.metadata || {};
+  const { ownerType, ownerId } = await resolveOwnerFromMetadata(metadata);
+  if (!ownerType || !ownerId) return null;
+
+  const lineItemsRes = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
+  const lineItems = lineItemsRes?.data || [];
+  const { items, subtotal, shippingCost, estimatedTax } = splitStripeLineItems(lineItems);
+
+  if (!items.length) return null;
+
+  const basePurchaseOrderId = metadata.purchaseOrderId || buildFallbackPurchaseOrderId(session.id);
+  let purchaseOrderId = basePurchaseOrderId;
+  const alreadyUsed = await PurchaseOrder.findOne({ purchaseOrderId }).lean();
+  if (alreadyUsed) {
+    purchaseOrderId = buildFallbackPurchaseOrderId(session.id);
+  }
+
+  const customerEmail =
+    session.customer_email || session.customer_details?.email || metadata.customer_email || "";
+
+  const order = await PurchaseOrder.create({
+    purchaseOrderId,
+    ownerType,
+    ownerId: toObjectId(ownerId),
+    stripeSessionId: session.id,
+    email: customerEmail,
+    items,
+    subtotal,
+    shippingCost,
+    estimatedTax,
+    totalAmount: Number(session.amount_total || 0) / 100,
+    paymentStatus: session.payment_status === "paid" ? "paid" : "pending",
+    shippingInfo: {
+      name: session.customer_details?.name || metadata.shipping_name || "",
+      address: session.customer_details?.address?.line1 || metadata.shipping_address || "",
+      city: session.customer_details?.address?.city || metadata.shipping_city || "",
+      postalCode:
+        session.customer_details?.address?.postal_code || metadata.shipping_postal_code || "",
+      country: session.customer_details?.address?.country || metadata.shipping_country || "",
+    },
+  });
+
+  if (order.paymentStatus === "paid") {
+    await sendOrderEmailsIfNeeded(order, "PaymentFallback");
+  }
+
+  return order;
+}
+
 /** CREATE STRIPE CHECKOUT SESSION */
 router.post("/create-checkout-session", async (req, res) => {
   try {
@@ -57,6 +175,7 @@ router.post("/create-checkout-session", async (req, res) => {
       form,
       ownerType,
       ownerId,
+      guestSessionId,
     } = req.body;
 
     const orderId = orderIdRaw || null;
@@ -138,6 +257,7 @@ router.post("/create-checkout-session", async (req, res) => {
       ...(orderId && { orderId }),
       ...(ownerType && { ownerType }),
       ...(ownerId && { ownerId }),
+      ...(guestSessionId && { guestSessionId }),
       ...(subtotal && { subtotal: String(subtotal) }),
       ...(shippingCost && { shippingCost: String(shippingCost) }),
       ...(estimatedTax && { estimatedTax: String(estimatedTax) }),
@@ -169,6 +289,41 @@ router.post("/create-checkout-session", async (req, res) => {
   } catch (err) {
     console.error("Stripe session error:", err);
     res.status(500).json({ error: "Failed to create checkout session", details: err.message });
+  }
+});
+
+/**
+ * GET ORDER BY STRIPE SESSION
+ * Returns an existing order or creates one from Stripe session data when webhook is delayed.
+ */
+router.get("/order/:sessionId", async (req, res) => {
+  try {
+    const { sessionId } = req.params;
+    if (!sessionId) {
+      return res.status(400).json({ error: "sessionId is required" });
+    }
+
+    const existing = await PurchaseOrder.findOne({ stripeSessionId: sessionId });
+    if (existing) {
+      if (existing.paymentStatus === "paid") {
+        await sendOrderEmailsIfNeeded(existing, "PaymentFetch");
+      }
+      return res.json(existing);
+    }
+
+    const order = await createOrderFromStripeSession(sessionId);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found for this session" });
+    }
+
+    if (order.paymentStatus === "paid") {
+      await sendOrderEmailsIfNeeded(order, "PaymentFetch");
+    }
+
+    return res.json(order);
+  } catch (err) {
+    console.error("Fetch order by session error:", err);
+    return res.status(500).json({ error: "Failed to fetch order", details: err.message });
   }
 });
 

@@ -60,9 +60,22 @@ const purchaseOrderSchema = new mongoose.Schema(
 
     // Stripe session ID after creating checkout session
     stripeSessionId: { type: String, default: "" },
+
+    // Stripe-backed payment lifecycle
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed", "refunded"],
+      default: "pending",
+    },
+
+    // Email delivery tracking to avoid duplicate notifications.
+    customerEmailSentAt: { type: Date, default: null },
+    adminEmailSentAt: { type: Date, default: null },
   },
   { timestamps: true } // automatically adds createdAt and updatedAt
 );
+
+purchaseOrderSchema.index({ stripeSessionId: 1 }, { unique: true, sparse: true });
 
 // Export the model
 const PurchaseOrder = mongoose.model("PurchaseOrder", purchaseOrderSchema);

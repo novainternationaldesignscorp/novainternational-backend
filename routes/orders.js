@@ -2,6 +2,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import PurchaseOrder from "../models/PurchaseOrder.js";
+import Guest from "../models/Guest.js";
 
 const router = express.Router();
 
@@ -62,6 +63,17 @@ router.get("/user/:userId", async (req, res) => {
 router.get("/guest/:guestId", async (req, res) => {
   try {
     const { guestId } = req.params;
+    const { sessionId } = req.query;
+
+    if (!sessionId) {
+      return res.status(401).json({ error: "Guest sessionId is required" });
+    }
+
+    const guest = await Guest.findById(guestId).select("sessionId").lean();
+    if (!guest || guest.sessionId !== sessionId) {
+      return res.status(401).json({ error: "Invalid or expired guest session" });
+    }
+
     const ownerId = toObjectId(guestId);
 
     const orders = await PurchaseOrder.find({

@@ -41,10 +41,18 @@ connectDB();
 app.use("/api/webhook", webhookRoutes);
 
 // CORS
+const envOrigins = (process.env.CORS_ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const allowedOrigins = [
-  "http://localhost:5173", // local dev
-  "https://calm-blini-7a30a5.netlify.app", // Netlify test
-  "https://www.novainternationaldesigns.com", // production
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://calm-blini-7a30a5.netlify.app",
+  "https://www.novainternationaldesigns.com",
+  "https://novainternational-backend.onrender.com",
+  ...envOrigins,
 ];
 
 app.use(

@@ -7,7 +7,8 @@ const router = express.Router();
 // GET /api/auth/me
 router.get("/", async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    // Not logged in is a valid app state; return 200 so frontend boot is quiet.
+    return res.status(200).json({ user: null, authenticated: false });
   }
 
   try {
@@ -22,6 +23,7 @@ router.get("/", async (req, res) => {
         name: user.name,
         email: user.email,
       },
+      authenticated: true,
     });
   } catch (err) {
     console.error("Fetch user error:", err);
