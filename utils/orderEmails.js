@@ -1,118 +1,12 @@
-import nodemailer from "nodemailer";
+// orderEmails.js (Resend version)
 import PurchaseOrder from "../models/PurchaseOrder.js";
 import User from "../models/User.js";
 import Guest from "../models/Guest.js";
+import { sendPurchaseOrderConfirmation, sendAdminOrderNotification } from "./sendEmail.js";
 
-const SMTP_HOST = process.env.SMTP_HOST || "smtp.office365.com";
-const SMTP_FALLBACK_HOST = process.env.SMTP_FALLBACK_HOST || "outlook.office365.com";
-const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
-const SMTP_EXTRA_FALLBACK_HOST =
-    process.env.SMTP_EXTRA_FALLBACK_HOST || "smtp-mail.outlook.com";
-
-const SMTP_ALT_PORT = Number(process.env.SMTP_ALT_PORT || 465);
-
-function createTransport(host) {
-    return nodemailer.createTransport({
-        host,
-        port: SMTP_PORT,
-        secure: SMTP_PORT === 465,
-        requireTLS: SMTP_PORT !== 465,
-        connectionTimeout: 30000,
-        greetingTimeout: 20000,
-        socketTimeout: 30000,
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-        logger: true,
-        tls: {
-            minVersion: "TLSv1.2",
-        },
-    });
-}
-
-function createTransportWithPort(host, port) {
-    return nodemailer.createTransport({
-        host,
-        port,
-        secure: port === 465,
-        requireTLS: port !== 465,
-        connectionTimeout: 30000,
-        greetingTimeout: 20000,
-        socketTimeout: 30000,
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-        logger: true,
-        tls: {
-            minVersion: "TLSv1.2",
-            servername: host,
-        },
-    });
-}
-
-let transporter = createTransport(SMTP_HOST);
-
-transporter.verify((err) => {
-    if (err) {
-        console.error("[OrderEmail] SMTP verify failed:", err?.message || err);
-        return;
-    }
-    console.log("[OrderEmail] SMTP verified and ready");
-});
-
-async function sendMailWithFallback(mailOptions) {
-    try {
-        return await transporter.sendMail(mailOptions);
-    } catch (err) {
-        const isTimeout =
-            err?.code === "ETIMEDOUT" ||
-            /timeout/i.test(String(err?.message || ""));
-
-        if (!isTimeout) {
-            throw err;
-        }
-
-        const hostCandidates = [SMTP_HOST, SMTP_FALLBACK_HOST, SMTP_EXTRA_FALLBACK_HOST].filter(
-            (host, index, arr) => host && arr.indexOf(host) === index
-        );
-
-        const profiles = [];
-        for (const host of hostCandidates) {
-            profiles.push({ host, port: SMTP_PORT });
-            if (SMTP_ALT_PORT && SMTP_ALT_PORT !== SMTP_PORT) {
-                profiles.push({ host, port: SMTP_ALT_PORT });
-            }
-        }
-
-        let lastError = err;
-        for (const profile of profiles) {
-            try {
-                console.warn("[OrderEmail] SMTP timeout. Retrying with Outlook profile", {
-                    primaryHost: SMTP_HOST,
-                    retryHost: profile.host,
-                    retryPort: profile.port,
-                });
-
-                transporter = createTransportWithPort(profile.host, profile.port);
-                return await transporter.sendMail(mailOptions);
-            } catch (retryErr) {
-                lastError = retryErr;
-                const retryTimedOut =
-                    retryErr?.code === "ETIMEDOUT" ||
-                    /timeout/i.test(String(retryErr?.message || ""));
-
-                if (!retryTimedOut) {
-                    throw retryErr;
-                }
-            }
-        }
-
-        throw lastError;
-    }
-}
-
+/**
+ * Resolve the customer's email from order or owner document
+ */
 const resolveCustomerEmail = async (order) => {
     if (order?.email) return order.email;
 
@@ -129,6 +23,11 @@ const resolveCustomerEmail = async (order) => {
     return "";
 };
 
+/**
+ * Sends customer and admin order emails if not already sent
+ * @param {Object} orderLike - Mongoose document or object with _id
+ * @param {string} logPrefix - Optional logging prefix
+ */
 export async function sendOrderEmailsIfNeeded(orderLike, logPrefix = "OrderEmail") {
     if (!orderLike?._id) return;
 
@@ -138,30 +37,18 @@ export async function sendOrderEmailsIfNeeded(orderLike, logPrefix = "OrderEmail
     const customerEmail = await resolveCustomerEmail(order);
     const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER;
 
+    // Send customer email if not already sent
     if (customerEmail) {
         const reservation = new Date();
         const claimedCustomer = await PurchaseOrder.findOneAndUpdate(
             { _id: order._id, customerEmailSentAt: null },
-            {
-                $set: {
-                    customerEmailSentAt: reservation,
-                    ...(order.email ? {} : { email: customerEmail }),
-                },
-            },
+            { $set: { customerEmailSentAt: reservation, ...(order.email ? {} : { email: customerEmail }) } },
             { new: true }
         ).lean();
 
         if (claimedCustomer) {
             try {
-                await sendMailWithFallback({
-                    from: process.env.SMTP_USER,
-                    to: customerEmail,
-                    subject: `Purchase Order Confirmation - ${order.purchaseOrderId}`,
-                    html: `<h2>Thank you for your purchase</h2><p>Order ID: ${order.purchaseOrderId}</p><p>Total: $${Number(
-                        order.totalAmount || 0
-                    ).toFixed(2)}</p>`,
-                });
-
+                await sendPurchaseOrderConfirmation(customerEmail, order);
                 console.log(`[${logPrefix}] Customer email sent`, {
                     purchaseOrderId: order.purchaseOrderId,
                     to: customerEmail,
@@ -171,11 +58,12 @@ export async function sendOrderEmailsIfNeeded(orderLike, logPrefix = "OrderEmail
                     { _id: order._id, customerEmailSentAt: reservation },
                     { $set: { customerEmailSentAt: null } }
                 );
-                throw err;
+                console.error(`[${logPrefix}] Customer email failed:`, err?.message || err);
             }
         }
     }
 
+    // Send admin email if not already sent
     if (adminEmail) {
         const reservation = new Date();
         const claimedAdmin = await PurchaseOrder.findOneAndUpdate(
@@ -186,15 +74,7 @@ export async function sendOrderEmailsIfNeeded(orderLike, logPrefix = "OrderEmail
 
         if (claimedAdmin) {
             try {
-                await sendMailWithFallback({
-                    from: process.env.SMTP_USER,
-                    to: adminEmail,
-                    subject: `New Order Received - ${order.purchaseOrderId}`,
-                    html: `<h2>New Order</h2><p>Order ID: ${order.purchaseOrderId}</p><p>Customer: ${customerEmail || order.email || "N/A"}</p><p>Total: $${Number(
-                        order.totalAmount || 0
-                    ).toFixed(2)}</p>`,
-                });
-
+                await sendAdminOrderNotification(order);
                 console.log(`[${logPrefix}] Admin email sent`, {
                     purchaseOrderId: order.purchaseOrderId,
                     to: adminEmail,
@@ -204,21 +84,20 @@ export async function sendOrderEmailsIfNeeded(orderLike, logPrefix = "OrderEmail
                     { _id: order._id, adminEmailSentAt: reservation },
                     { $set: { adminEmailSentAt: null } }
                 );
-                throw err;
+                console.error(`[${logPrefix}] Admin email failed:`, err?.message || err);
             }
         }
     }
 }
 
+/**
+ * Async wrapper to send emails in the background
+ */
 export function sendOrderEmailsInBackground(orderLike, logPrefix = "OrderEmail") {
-    // Never block request/response lifecycle on SMTP availability.
+    // Never block request/response lifecycle on email delivery
     Promise.resolve(sendOrderEmailsIfNeeded(orderLike, logPrefix)).catch((err) => {
         console.error(`[${logPrefix}] Async email dispatch failed:`, {
             message: err?.message || String(err),
-            code: err?.code,
-            command: err?.command,
-            responseCode: err?.responseCode,
-            response: err?.response,
         });
     });
 }

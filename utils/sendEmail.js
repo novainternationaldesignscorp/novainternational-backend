@@ -1,74 +1,47 @@
-// mailer.js
-import nodemailer from "nodemailer";
+// sendEmail.js (Resend version)
+import { Resend } from "resend";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: "outlook.office365.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: SMTP_USER,
-    pass: SMTP_PASS,
-  },
-  tls: {
-    minVersion: "TLSv1.2",
-  },
-  connectionTimeout: 20000,
-  greetingTimeout: 15000,
-  socketTimeout: 20000,
-  pool: true,            // <-- Enable connection pooling
-  maxConnections: 5,     // Optional: max simultaneous connections
-  maxMessages: 100,      // Optional: max messages per connection before reconnect
-  logger: true,          // set to false in production
-});
-
-
-// Verify SMTP connection on startup
-transporter.verify((err, success) => {
-  if (success) {
-    console.log("✅ Email service connected - SMTP ready");
-  } else {
-    console.error("❌ Email service failed:", err?.message || "Unknown error");
-    console.error("Check SMTP_USER and SMTP_PASS in .env");
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
- * Generic send email function
+ * Generic sendEmail function
+ * @param {string} to - Recipient email
+ * @param {string} subject - Email subject
+ * @param {string} content - HTML or plain text content
+ * @param {boolean} isHtml - True for HTML, false for plain text
  */
-export const sendEmail = async (to, subject, content, isHtml = true) => {
+export async function sendEmail(to, subject, content, isHtml = true) {
   if (!to) return false;
 
   try {
-    const info = await transporter.sendMail({
-      from: `"Nova International Designs" <${process.env.SMTP_USER}>`,
-      to: process.env.SMTP_USER,
-      subject: "SMTP Test",
+    const response = await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL,
+      to,
+      subject,
       [isHtml ? "html" : "text"]: content,
     });
 
-    console.log(`✅ Email sent to ${to}: ${info.messageId}`);
+    console.log(`✅ Email sent to ${to}: ${response.id}`);
     return true;
   } catch (err) {
-    console.error(`❌ Failed to send email to ${to}:`, err.message);
+    console.error(`❌ Failed to send email to ${to}:`, err?.message || err);
     return false;
   }
-};
+}
 
 /**
  * Purchase Order Confirmation Email
  */
-export const sendPurchaseOrderConfirmation = async (email, orderData) => {
+export async function sendPurchaseOrderConfirmation(email, orderData) {
   const { purchaseOrderId, customerName, items = [], totalAmount, shippingInfo, notes, createdAt } = orderData;
 
   const orderDate = createdAt ? new Date(createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : new Date().toLocaleDateString();
 
   const itemsHTML = items
-    .map(
-      item => `
+    .map(item => `
       <tr>
         <td>${item.description || "Product"}</td>
         <td>${item.color || "-"}</td>
@@ -76,8 +49,7 @@ export const sendPurchaseOrderConfirmation = async (email, orderData) => {
         <td>${item.qty || 1}</td>
         <td>$${(item.price || 0).toFixed(2)}</td>
         <td>$${((item.qty || 1) * (item.price || 0)).toFixed(2)}</td>
-      </tr>`
-    ).join("");
+      </tr>`).join("");
 
   const html = `
     <h2>Thank you for your order!</h2>
@@ -98,12 +70,12 @@ export const sendPurchaseOrderConfirmation = async (email, orderData) => {
   `;
 
   return sendEmail(email, `Purchase Order Confirmation - ${purchaseOrderId}`, html, true);
-};
+}
 
 /**
  * Payment Confirmation Email
  */
-export const sendPaymentConfirmationEmail = async (email, paymentData) => {
+export async function sendPaymentConfirmationEmail(email, paymentData) {
   const { purchaseOrderId, customerName, totalAmount } = paymentData;
 
   const html = `
@@ -114,13 +86,13 @@ export const sendPaymentConfirmationEmail = async (email, paymentData) => {
   `;
 
   return sendEmail(email, `Payment Confirmation - ${purchaseOrderId}`, html, true);
-};
+}
 
 /**
  * Admin Notification Email
  */
-export const sendAdminOrderNotification = async (orderData) => {
-  const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER;
+export async function sendAdminOrderNotification(orderData) {
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.RESEND_FROM_EMAIL;
   if (!adminEmail) return false;
 
   const { purchaseOrderId, customerName, email: customerEmail, totalAmount, items = [] } = orderData;
@@ -135,6 +107,6 @@ export const sendAdminOrderNotification = async (orderData) => {
   `;
 
   return sendEmail(adminEmail, `New Paid Order - ${purchaseOrderId}`, html, true);
-};
+}
 
 export default sendEmail;

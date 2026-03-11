@@ -1,4 +1,4 @@
-// purchaseorder.js (Stripe-friendly)
+// purchaseOrder.js (Stripe + Resend email ready)
 import express from "express";
 import crypto from "crypto";
 import mongoose from "mongoose";
@@ -6,11 +6,30 @@ import PurchaseOrder from "../models/PurchaseOrder.js";
 import PurchaseOrderDraft from "../models/PurchaseOrderDraft.js";
 import User from "../models/User.js";
 import Guest from "../models/Guest.js";
-import { sendOrderEmailsInBackground } from "../utils/orderEmails.js";
+import { sendPurchaseOrderConfirmation, sendAdminOrderNotification } from "../utils/sendEmail.js"; // fixed path
+
 
 const router = express.Router();
 
-// Create new purchase order (Stripe-ready)
+/*
+ * Utility: validate email format
+ */
+const isValidEmail = (email) => {
+  if (!email) return false;
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(String(email).toLowerCase());
+};
+
+/**
+ * Utility: convert to ObjectId if valid
+ */
+const toObjectId = (id) =>
+  mongoose.Types.ObjectId.isValid(id) ? new mongoose.Types.ObjectId(id) : id;
+
+/**
+ * POST /purchase-order
+ * Create a new purchase order (Stripe-ready)
+ */
 router.post("/", async (req, res) => {
   try {
     const {
@@ -23,16 +42,7 @@ router.post("/", async (req, res) => {
       stripeSessionId,
     } = req.body;
 
-    // Validate email if provided
-    let recipientEmail = email;
-    if (recipientEmail) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(String(recipientEmail).toLowerCase())) {
-        return res.status(400).json({ error: "Invalid email format" });
-      }
-    }
-
-    // Determine final owner type & ID
+    // Determine owner type & ID
     let finalOwnerType = ownerType;
     let finalOwnerId = ownerId;
     if (!finalOwnerType || !finalOwnerId) {
@@ -43,29 +53,37 @@ router.post("/", async (req, res) => {
         finalOwnerType = "Guest";
         finalOwnerId = guestId;
       } else {
-        return res.status(400).json({ error: "Either userId or guestId must be provided" });
+        return res
+          .status(400)
+          .json({ error: "Either userId or guestId must be provided" });
       }
     }
 
     if (!["User", "Guest"].includes(finalOwnerType)) {
-      return res.status(400).json({ error: "ownerType must be 'User' or 'Guest'" });
+      return res
+        .status(400)
+        .json({ error: "ownerType must be 'User' or 'Guest'" });
+    }
+
+    // Validate email if provided
+    let recipientEmail = email;
+    if (recipientEmail && !isValidEmail(recipientEmail)) {
+      return res.status(400).json({ error: "Invalid email format" });
     }
 
     // Determine purchaseOrderId
     let purchaseOrderId = incomingPOId;
     if (!purchaseOrderId) {
-      const ownerIdObj = mongoose.Types.ObjectId.isValid(finalOwnerId)
-        ? new mongoose.Types.ObjectId(finalOwnerId)
-        : finalOwnerId;
+      const ownerIdObj = toObjectId(finalOwnerId);
       const draft = await PurchaseOrderDraft.findOne({
         ownerType: finalOwnerType,
         ownerId: ownerIdObj,
       });
-      if (draft && draft.purchaseOrderId) purchaseOrderId = draft.purchaseOrderId;
+      if (draft?.purchaseOrderId) purchaseOrderId = draft.purchaseOrderId;
     }
     if (!purchaseOrderId) purchaseOrderId = crypto.randomBytes(16).toString("hex");
 
-    // Clean empty-string top-level fields
+    // Clean empty strings from top-level fields
     const cleaned = {};
     Object.keys(req.body || {}).forEach((k) => {
       const v = req.body[k];
@@ -74,30 +92,33 @@ router.post("/", async (req, res) => {
       cleaned[k] = v;
     });
 
-    // Remove empty strings inside nested objects like form & shippingInfo
+    // Clean empty strings in nested objects
     ["form", "shippingInfo"].forEach((field) => {
       if (cleaned[field] && typeof cleaned[field] === "object") {
         Object.keys(cleaned[field]).forEach((k) => {
-          if (typeof cleaned[field][k] === "string" && cleaned[field][k].trim() === "") {
+          if (typeof cleaned[field][k] === "string" && cleaned[field][k].trim() === "")
             delete cleaned[field][k];
-          }
         });
         if (Object.keys(cleaned[field]).length === 0) delete cleaned[field];
       }
     });
 
-    // Lookup email from User or Guest if not provided
+    // Lookup email from DB if not provided
     if (!recipientEmail) {
       try {
         if (finalOwnerType === "User") {
-          const userDoc = await User.findById(finalOwnerId).select("email name").lean();
-          if (userDoc && userDoc.email) {
+          const userDoc = await User.findById(finalOwnerId)
+            .select("email name")
+            .lean();
+          if (userDoc?.email) {
             recipientEmail = userDoc.email;
             if (!cleaned.customerName && userDoc.name) cleaned.customerName = userDoc.name;
           }
         } else if (finalOwnerType === "Guest") {
-          const guestDoc = await Guest.findById(finalOwnerId).select("email name").lean();
-          if (guestDoc && guestDoc.email) {
+          const guestDoc = await Guest.findById(finalOwnerId)
+            .select("email name")
+            .lean();
+          if (guestDoc?.email) {
             recipientEmail = guestDoc.email;
             if (!cleaned.customerName && guestDoc.name) cleaned.customerName = guestDoc.name;
           }
@@ -107,19 +128,18 @@ router.post("/", async (req, res) => {
       }
     }
 
+    // Prepare order data
     const orderData = {
       ...cleaned,
       email: recipientEmail,
       purchaseOrderId,
       ownerType: finalOwnerType,
-      ownerId: mongoose.Types.ObjectId.isValid(finalOwnerId)
-        ? new mongoose.Types.ObjectId(finalOwnerId)
-        : finalOwnerId,
-      stripeSessionId: stripeSessionId || null, // Link order to Stripe session
-      paymentStatus: "pending", // Initially pending
+      ownerId: toObjectId(finalOwnerId),
+      stripeSessionId: stripeSessionId || null,
+      paymentStatus: "pending",
     };
 
-    // Save order with retry logic for unique purchaseOrderId
+    // Save order with retry for unique purchaseOrderId
     let order = null;
     const maxRetries = 5;
     let attempt = 0;
@@ -129,7 +149,7 @@ router.post("/", async (req, res) => {
         await order.save();
         break;
       } catch (e) {
-        if (e.code === 11000 && e.keyPattern && e.keyPattern.purchaseOrderId) {
+        if (e.code === 11000 && e.keyPattern?.purchaseOrderId) {
           attempt++;
           purchaseOrderId = crypto.randomBytes(16).toString("hex");
           orderData.purchaseOrderId = purchaseOrderId;
@@ -138,11 +158,17 @@ router.post("/", async (req, res) => {
         throw e;
       }
     }
-
     if (!order) throw new Error("Failed to save order after multiple attempts");
 
-    // Email send is intentionally async so order creation never fails because of SMTP issues.
-    sendOrderEmailsInBackground(order, "PurchaseOrderCreate");
+    // Async: send customer & admin emails
+    (async () => {
+      try {
+        if (recipientEmail) await sendPurchaseOrderConfirmation(recipientEmail, order);
+        await sendAdminOrderNotification(order);
+      } catch (emailErr) {
+        console.error("Email sending error:", emailErr.message);
+      }
+    })();
 
     res.json({ message: "Order saved successfully", order });
   } catch (error) {
