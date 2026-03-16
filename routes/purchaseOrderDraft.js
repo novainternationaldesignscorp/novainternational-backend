@@ -5,6 +5,27 @@ import mongoose from "mongoose";
 
 const router = express.Router();
 
+const normalizeField = (value) => {
+  if (value === undefined || value === null || value === "") return null;
+  return String(value);
+};
+
+const matchesDraftItem = (item, { productId, color, size }) => {
+  const itemProductId = normalizeField(item.productId);
+  const targetProductId = normalizeField(productId);
+  if (!targetProductId || itemProductId !== targetProductId) return false;
+
+  const targetColor = normalizeField(color);
+  const targetSize = normalizeField(size);
+  const itemColor = normalizeField(item.color);
+  const itemSize = normalizeField(item.size);
+
+  const colorMatch = targetColor === null ? true : itemColor === targetColor;
+  const sizeMatch = targetSize === null ? true : itemSize === targetSize;
+
+  return colorMatch && sizeMatch;
+};
+
 /**
  * GET /:ownerType/:ownerId
  * Fetch or create a draft PO for a user or guest
@@ -77,8 +98,12 @@ router.post("/:ownerType/:ownerId/items", async (req, res) => {
     }))];
 
     items.forEach((item) => {
-      const idx = merged.findIndex(
-        (i) => i.productId === item.productId && i.color === item.color && i.size === item.size
+      const idx = merged.findIndex((i) =>
+        matchesDraftItem(i, {
+          productId: item.productId,
+          color: item.color,
+          size: item.size,
+        })
       );
       if (idx > -1) {
         merged[idx].qty = (Number(merged[idx].qty) || 0) + (Number(item.quantity) || 0);
@@ -132,11 +157,7 @@ router.delete("/:ownerType/:ownerId/items", async (req, res) => {
     if (productId) {
       // Remove matching items (match productId + optional color + size)
       const newItems = po.items.filter(
-        (i) => !(
-          i.productId === productId &&
-          (color ? i.color === color : true) &&
-          (size ? i.size === size : true)
-        )
+        (i) => !matchesDraftItem(i, { productId, color, size })
       );
 
       if (newItems.length === po.items.length) {
@@ -194,11 +215,8 @@ router.patch("/:ownerType/:ownerId/items", async (req, res) => {
     const po = await PurchaseOrderDraft.findOne({ ownerType, ownerId: ownerIdObj });
     if (!po) return res.status(404).json({ error: "Draft not found" });
 
-    const index = po.items.findIndex(
-      (i) =>
-        i.productId === productId &&
-        (color ? i.color === color : true) &&
-        (size ? i.size === size : true)
+    const index = po.items.findIndex((i) =>
+      matchesDraftItem(i, { productId, color, size })
     );
 
     if (index === -1) {

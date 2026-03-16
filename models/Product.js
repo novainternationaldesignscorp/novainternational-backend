@@ -7,6 +7,11 @@ const ProductSchema = new mongoose.Schema(
       required: true
     },
     price: Number,
+    styleNo: {
+      type: String,
+      required: true,
+      unique: true
+    },
 
     category: {
     type: String,
