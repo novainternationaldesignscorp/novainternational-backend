@@ -1,8 +1,54 @@
 // sendEmail.js (Resend version with enhanced logging)
 import { Resend } from "resend";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import User from "../models/User.js";
+import Guest from "../models/Guest.js";
 
 dotenv.config();
+
+/**
+ * Resolve the display name for an order owner from the database.
+ * Falls back to shippingInfo.name, then email prefix if not found.
+ */
+async function userName(orderData) {
+  if (orderData.customerName && String(orderData.customerName).trim()) {
+    return orderData.customerName.trim();
+  }
+
+  if (orderData.shippingInfo?.name && String(orderData.shippingInfo.name).trim()) {
+    return orderData.shippingInfo.name.trim();
+  }
+
+  try {
+    const { ownerType, ownerId } = orderData;
+    if (ownerType && ownerId) {
+      const id = mongoose.Types.ObjectId.isValid(ownerId)
+        ? new mongoose.Types.ObjectId(ownerId)
+        : ownerId;
+
+      let record = null;
+      if (ownerType === "User") {
+        record = await User.findById(id).select("name").lean();
+      } else if (ownerType === "Guest") {
+        record = await Guest.findById(id).select("name").lean();
+      }
+
+      if (record?.name && String(record.name).trim()) {
+        return record.name.trim();
+      }
+    }
+  } catch (err) {
+    console.warn("Could not resolve customer name from DB:", err?.message);
+  }
+
+  // Last resort – use email prefix
+  if (orderData.email) {
+    return orderData.email.split("@")[0];
+  }
+
+  return "Customer";
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -43,7 +89,8 @@ export async function sendEmail(to, subject, content, isHtml = true) {
  * Purchase Order Confirmation Email
  */
 export async function sendPurchaseOrderConfirmation(email, orderData) {
-  const { purchaseOrderId, customerName, items = [], totalAmount, shippingInfo, notes, createdAt } = orderData;
+  const customerName = await userName(orderData);
+  const { purchaseOrderId, items = [], totalAmount, shippingInfo, notes, createdAt } = orderData;
 
   const orderDate = createdAt
     ? new Date(createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
@@ -66,7 +113,7 @@ export async function sendPurchaseOrderConfirmation(email, orderData) {
     <h2>Thank you for your order!</h2>
     <p>Purchase Order ID: <strong>${purchaseOrderId}</strong></p>
     <p>Order Date: ${orderDate}</p>
-    <p>Customer: ${customerName || "N/A"}</p>
+    <p>Customer: ${customerName}</p>
     <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%;">
       <thead>
         <tr><th>Product</th><th>Color</th><th>Size</th><th>Qty</th><th>Price</th><th>Total</th></tr>
@@ -109,7 +156,8 @@ export async function sendAdminOrderNotification(orderData) {
     return false;
   }
 
-  const { purchaseOrderId, customerName, email: customerEmail, totalAmount, items = [] } = orderData;
+  const customerName = await userName(orderData);
+  const { purchaseOrderId, email: customerEmail, totalAmount, items = [] } = orderData;
 
   const html = `
     <h3>New Order Received</h3>

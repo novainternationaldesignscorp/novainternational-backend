@@ -42,6 +42,66 @@ router.get("/id/:id", async (req, res) => {
 });
 
 /**
+ * GET PRODUCT BY STYLE NO
+ */
+router.get("/style/:styleNo", async (req, res) => {
+  try {
+    const rawStyleNo = String(req.params.styleNo || "").trim();
+    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const styleNoRegex = new RegExp(`^\\s*${esc(rawStyleNo)}\\s*$`, "i");
+
+    const product = await Product.findOne({ styleNo: { $regex: styleNoRegex } });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
+ * GET PRODUCT BY FLEXIBLE IDENTIFIER
+ * Accepts Mongo _id, styleNo, variant.styleNo, or variant.productId
+ */
+router.get("/lookup/:identifier", async (req, res) => {
+  try {
+    const rawIdentifier = String(req.params.identifier || "").trim();
+    if (!rawIdentifier) {
+      return res.status(400).json({ message: "Identifier is required" });
+    }
+
+    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const idRegex = new RegExp(`^\\s*${esc(rawIdentifier)}\\s*$`, "i");
+
+    let product = null;
+
+    if (/^[a-f\d]{24}$/i.test(rawIdentifier)) {
+      product = await Product.findById(rawIdentifier);
+    }
+
+    if (!product) {
+      product = await Product.findOne({
+        $or: [
+          { styleNo: { $regex: idRegex } },
+          { "variants.styleNo": { $regex: idRegex } },
+          { "variants.productId": { $regex: idRegex } },
+        ],
+      });
+    }
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+/**
  * GET PRODUCT BY SLUG
  */
 router.get("/slug/:slug", async (req, res) => {

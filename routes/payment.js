@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const EXTRA_FEE = 4.7;
+const PROCESSING_FEE_RATE = 0.05;
 
 console.log(
   "Stripe key loaded:",
@@ -65,7 +65,7 @@ const splitStripeLineItems = (lineItems = []) => {
   const items = [];
   let shippingCost = 0;
   let estimatedTax = 0;
-  let extraFee = 0;
+  let Processing_Fee = 0;
 
   for (const li of lineItems) {
     const label = String(li.description || "").trim();
@@ -82,7 +82,7 @@ const splitStripeLineItems = (lineItems = []) => {
     }
 
     if (label === "Processing Fee") {
-    extraFee += amount;
+    Processing_Fee += amount;
     continue;
 }
 
@@ -96,7 +96,7 @@ const splitStripeLineItems = (lineItems = []) => {
   }
 
   const subtotal = items.reduce((sum, item) => sum + Number(item.total || 0), 0);
-  return { items, subtotal, shippingCost, estimatedTax, extraFee };
+  return { items, subtotal, shippingCost, estimatedTax, Processing_Fee };
 };
 
 async function resolveOwnerFromMetadata(metadata = {}) {
@@ -129,7 +129,7 @@ async function createOrderFromStripeSession(sessionId) {
   if (!ownerType || !ownerId) return null;
 
   const lineItemsRes = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
-  const { items, subtotal, shippingCost, estimatedTax, extraFee } = splitStripeLineItems(lineItemsRes.data);
+  const { items, subtotal, shippingCost, estimatedTax, Processing_Fee } = splitStripeLineItems(lineItemsRes.data);
 
   if (!items.length) return null;
 
@@ -150,7 +150,7 @@ async function createOrderFromStripeSession(sessionId) {
     subtotal,
     shippingCost,
     estimatedTax,
-    extraFee,
+    Processing_Fee,
     totalAmount: Number(session.amount_total || 0) / 100,
     paymentStatus: session.payment_status === "paid" ? "paid" : "pending",
     shippingInfo: {
@@ -225,6 +225,12 @@ router.post("/create-checkout-session", async (req, res) => {
       quantity: Math.max(1, Number(it.qty || it.quantity || 1)),
     }));
 
+    const computedSubtotal = items.reduce(
+      (sum, it) => sum + Math.max(1, Number(it.qty || it.quantity || 1)) * Number(it.price || 0),
+      0
+    );
+    const processingFee = computedSubtotal > 0 ? computedSubtotal * PROCESSING_FEE_RATE : 0;
+
     // ADD TAX AS LINE ITEM
     if (estimatedTax && estimatedTax > 0) {
       line_items.push({
@@ -237,13 +243,13 @@ router.post("/create-checkout-session", async (req, res) => {
       });
     }
 
-    // ADD PROCESSING FEE
-    if (EXTRA_FEE > 0) {
+    // ADD PROCESSING FEE (5% of subtotal)
+    if (processingFee > 0) {
       line_items.push({
         price_data: {
           currency: "usd",
           product_data: { name: "Processing Fee" },
-          unit_amount: Math.round(EXTRA_FEE * 100),
+          unit_amount: Math.round(processingFee * 100),
         },
         quantity: 1,
       });

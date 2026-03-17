@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const draftItemSchema = new mongoose.Schema({
   productId: String,
+  styleNo: String,
   name: String,
+  description: String,
   price: Number,
   qty: Number,
   image: { type: String, default: null },

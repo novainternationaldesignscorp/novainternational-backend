@@ -1,6 +1,6 @@
   [
     { 
-      "styleNo": "NovaWKF",
+      "styleNo": "NovaWKF106S",
       "name": "White Kaftan",
       "price": 150.99,
       "category": "Fashion",
@@ -42,6 +42,7 @@
       ]
     },
     {
+      "styleNo": "NovaDLG109S",
       "name": "Designer Long Gown",
       "price": 210.99,
       "category": "Fashion",
@@ -83,7 +84,7 @@
       ]
     },
     {
-      "styleNo": "NovaBPD",
+      "styleNo": "NovaBPD101S",
       "name": "Blue Printed",
       "price": 99.99,
       "category": "Fashion",
@@ -281,7 +282,7 @@
 
     {
       "styleNo": "NOVAT2-101",
-      "name": "T2 Robot - NOVAT2-101",
+      "name": "T2 Robot",
       "productId": "NOVAT2-101",
       "price": 745.99,
       "description": "Educational Robot for kids with customized apps for educational learning for kids\nHelpful with Stem Education and Voice Commands and has parental control for kids \nAvailable for Shipping anywhere in USA",
@@ -294,7 +295,7 @@
     },
     {
       "styleNo": "NOVAT2-101",
-      "name": "Kids Robot - NOVAT2-101",
+      "name": "Kids Robot",
       "productId": "NOVAT2-101",
       "price": 745.99,
       "description": "Educational Robot for kids with customized apps for educational learning for kids\nHelpful with Stem Education and Voice Commands and has parental control for kids \nAvailable for Shipping anywhere in USA",
@@ -307,7 +308,7 @@
     },
     {
       "styleNo": "NOVAT2-101",
-      "name": "Technologically Advanced Robots - NOVAT2-101",
+      "name": "Technologically Advanced Robots",
       "productId": "NOVAT2-101",
       "price": 745.99,
       "description": "Educational Robot for kids with customized apps for educational learning for kids\nHelpful with Stem Education and Voice Commands and has parental control for kids \nAvailable for Shipping anywhere in USA",
@@ -320,7 +321,7 @@
     },
     {
       "styleNo": "NOVAVS-102",
-      "name": "Vacuum Sealing Machine - NOVAVS-102",
+      "name": "Vacuum Sealing Machine",
       "productId": "NOVAVS-102",
       "price": 125.99,
       "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
@@ -334,7 +335,7 @@
     },
     {
       "styleNo": "NOVAVS-102",
-      "name": "Zip Lock Vacuum Sealers - NOVAVS-102",
+      "name": "Zip Lock Vacuum Sealers",
       "productId": "NOVAVS-102",
       "price": 125.99,
       "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
@@ -348,7 +349,7 @@
     },
     {
       "styleNo": "NOVAVS-102",
-      "name": "Kitchenware Vacuum Sealers - NOVAVS-102",
+      "name": "Kitchenware Vacuum Sealers",
       "productId": "NOVAVS-102",
       "price": 125.99,
       "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
@@ -362,7 +363,7 @@
     },
     {
       "styleNo": "NOVAVS-102",
-      "name": "Technologically Advance Vacuum Sealers - NOVAVS-102",
+      "name": "Technologically Advance Vacuum Sealers",
       "productId": "NOVAVS-102",
       "price": 125.99,
       "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
@@ -376,7 +377,7 @@
     },
     {
       "styleNo": "NOVADPF-105",
-      "name": "Digital Photo Frame - NOVADPF-105 ",
+      "name": "Digital Photo Frame",
       "productId": "NOVADPF-105",
       "price": 225.99,
       "description": "Interactive Digital photo frame where you can upload \nYour good times and moments with loved ones",
@@ -390,7 +391,7 @@
     },
     {
       "styleNo": "NOVADPF-105", 
-      "name": "Digital Photo Frame - NOVADPF-105",
+      "name": "Digital Photo Frame",
       "productId": "NOVADPF-105",
       "price": 225.99,
       "description": "Interactive Digital photo frame where you can upload \nYour good times and moments with loved ones",
@@ -404,7 +405,7 @@
     },
     {
       "styleNo": "NOVACF-104",
-      "name": "Campfire Light - NOVACF-104",
+      "name": "Campfire Light",
       "productId": "NOVACF-104",
       "price": 150.99,
       "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
@@ -418,7 +419,7 @@
     },
     {
       "styleNo": "NOVACF-104",
-      "name": "Bluetooth & Wireless Speakers - NOVACF-104",
+      "name": "Bluetooth & Wireless Speakers",
       "productId": "NOVACF-104",
       "price": 150.99,
       "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
@@ -432,7 +433,7 @@
     },
     {
       "styleNo": "NOVACF-104",
-      "name": "Campfire Bluetooth Speakers - NOVACF-104",
+      "name": "Campfire Bluetooth Speakers",
       "productId": "NOVACF-104",
       "price": 150.99,
       "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
@@ -446,7 +447,7 @@
     },
     {
       "styleNo": "NOVACF-104",
-      "name": "Technologically Advanced Bluetooth Speakers - NOVACF-104",
+      "name": "Technologically Advanced Bluetooth Speakers",
       "productId": "NOVACF-104",
       "price": 150.99,
       "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
@@ -460,7 +461,7 @@
     },
     {
       "styleNo": "NOVAFN-106",
-      "name": "Bladeless Fan - NOVAFN-106",
+      "name": "Bladeless Fan",
       "productId": "NOVAFN-106",
       "price": 1500.99,
       "color": ["White", "Black", "Beige"],
@@ -475,7 +476,7 @@
     },
     {
       "styleNo": "NOVAFN-106",
-      "name": "Technologically Advanced Fans - NOVAFN-106",
+      "name": "Technologically Advanced Fans",
       "productId": "NOVAFN-106",
       "price": 1500.99,
       "color": ["White", "Black", "Beige"],
@@ -490,7 +491,7 @@
     },
     {
       "styleNo": "NOVAFN-106",
-      "name": "Musical Fans - NOVAFN-106",
+      "name": "Musical Fans",
       "productId": "NOVAFN-106",
       "price": 1500.99,
       "color": ["White", "Black", "Beige"],
@@ -506,7 +507,7 @@
 
     {
       "styleNo": "NOVABM-103",
-      "name": "Baby Monitor - NOVABM-103",
+      "name": "Baby Monitor",
       "productId": "NOVABM-103",
       "price": 145.99,
       "color": ["Pink", "Blue"],
@@ -522,13 +523,14 @@
     {
       "styleNo": "NOVCK",
       "name": "Churas and Kaliras",
+      "productId": "NOVCK",
       "price": 99.99,
       "color": ["Red", "White"],
       "description": "Beautifully designed churas and kaliras for brides to be. Available in multiple colors and sizes.",
       "category": "wedding-gifts",
       "subcategory": "churas-and-kaliras",
       "slug": "churas-and-kaliras",
-      "minQty": 1,
+      "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773423508/chura-box-closed-logo_njfkw6.png",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773423507/chura-box_u6pwvd.png",
@@ -543,17 +545,15 @@
     {
       "styleNo": "NOVCHOC",
       "name": "Nova Chocolate",
+      "productId": "NOVCHOC",
       "price": 99.99,
-      "description": "Delicious Nova Chocolates available in multiple flavors and designs.",
+      "description": "Delicious Nova Chocolates are available.",
       "category": "nova-chocolates",
       "subcategory": "milk-bar",
       "slug": "milk-bar",
-      "minQty": 1,
+      "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773426310/choclate3-4-final_km4kzg.jpg"
-      ],
-      "variants": [
-        { "color": "Milk", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773426310/choclate3-4-final_km4kzg.jpg" }
       ]
     }
-  ]
+  ] 
