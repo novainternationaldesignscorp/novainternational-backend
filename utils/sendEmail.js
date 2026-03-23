@@ -74,13 +74,13 @@ export async function sendEmail(to, subject, content, isHtml = true) {
     });
 
     // Log full response for debugging
-    console.log("✅ Email request sent to", to);
+    console.log(" Email request sent to", to);
     console.log("Resend response:", response);
 
     // Optional: indicate success if Resend returns an ID
     return response?.id ? true : false;
   } catch (err) {
-    console.error(`❌ Failed to send email to ${to}:`, err?.message || err);
+    console.error(` Failed to send email to ${to}:`, err?.message || err);
     return false;
   }
 }

@@ -26,9 +26,9 @@ if (SMTP_USER && SMTP_PASS) {
     logger: false, // true for debug
   });
 
-  console.log("📧 Mailer initialized with Outlook SMTP.");
+  console.log(" Mailer initialized with Outlook SMTP.");
 } else {
-  console.warn("⚠️ SMTP_USER or SMTP_PASS not set. Mailer disabled.");
+  console.warn(" SMTP_USER or SMTP_PASS not set. Mailer disabled.");
 }
 
 /**
@@ -36,7 +36,7 @@ if (SMTP_USER && SMTP_PASS) {
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
   if (!transporter) {
-    console.warn("⚠️ Mailer not configured. Email not sent:", subject);
+    console.warn(" Mailer not configured. Email not sent:", subject);
     return false;
   }
 
@@ -48,10 +48,10 @@ export const sendEmail = async ({ to, subject, html, text }) => {
       html,
       text,
     });
-    console.log(`✅ Email sent to ${to}`);
+    console.log(` Email sent to ${to}`);
     return true;
   } catch (err) {
-    console.error(`❌ Failed to send email to ${to}:`, err.message);
+    console.error(` Failed to send email to ${to}:`, err.message);
     return false;
   }
 };

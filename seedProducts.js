@@ -1,4 +1,4 @@
-  [
+  const products = [
     { 
       "styleNo": "NovaWKF106S",
       "name": "White Kaftan",
@@ -12,6 +12,12 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337657/white-dress-2-nova-international_bcq3lb.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337658/white-dress-4-nova-international_u7ucqo.jpg"  
       ],
+      "images_public_id": [ 
+        "white-dress-3-nova-international_ktmyn9",
+        "white-dress-1-nova-international_mscxmo",
+        "white-dress-2-nova-international_bcq3lb",
+        "white-dress-4-nova-international_u7ucqo"
+      ],
       "description": "Classic women's dress available in multiple sizes and Made with 100% pure cotton.",
       "minQty": 1,
       "variants": [
@@ -21,23 +27,28 @@
           "color": "White",
           "size": "S",
           "price": 150.99,
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg",
+          "image_public_id": "white-dress-3-nova-international_ktmyn9"
         },
+        
         {
           "styleNo": "NovaWKF107M",
           "productId": "NovaWKF107M",
           "color": "White",
           "size": "M",
           "price": 160.99,
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg",
+          "image_public_id": "white-dress-3-nova-international_ktmyn9"
         },
+          
         {
           "styleNo": "NovaWKF108L",
           "productId": "NovaBPD108L",
           "color": "White",
           "size": "L",
           "price": 170.99,
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg",
+          "image_public_id": "white-dress-3-nova-international_ktmyn9"
         }
       ]
     },
@@ -54,6 +65,12 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337658/brown-dress-4-nova-international_cvgxrd.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/brown-dress-3-nova-international_lz5hny.jpg"
       ],
+      "images_public_id": [ 
+        "brown-dress-2-nova-international_flbdzc",
+        "brown-dress-1-nova-international_pvcgyc",
+        "brown-dress-4-nova-international_cvgxrd",
+        "brown-dress-3-nova-international_lz5hny"
+      ],
       "description": "Classic women's dress available in multiple sizes and Made with 100% pure cotton.",
       "minQty": 1,
       "variants": [
@@ -63,7 +80,8 @@
           "size": "S",
           "price": 210.99,
           "productId": "NovaDLG109S",
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337655/brown-dress-2-nova-international_flbdzc.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337655/brown-dress-2-nova-international_flbdzc.jpg",
+          "image_public_id": "brown-dress-2-nova-international_flbdzc"
         },
         {
           "styleNo": "NovaDLG110M",
@@ -71,7 +89,8 @@
           "size": "M",
           "price": 220.99,
           "productId": "NovaDLG110M",
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337655/brown-dress-2-nova-international_flbdzc.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337655/brown-dress-2-nova-international_flbdzc.jpg",
+          "image_public_id": "brown-dress-2-nova-international_flbdzc"
         },
         {
           "styleNo": "NovaDLG120L",
@@ -79,7 +98,8 @@
           "size": "L",
           "productId": "NovaDLG120L",
           "price": 230.99,
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337655/brown-dress-2-nova-international_flbdzc.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337655/brown-dress-2-nova-international_flbdzc.jpg",
+          "image_public_id": "brown-dress-2-nova-international_flbdzc"
         }
       ]
     },
@@ -96,6 +116,12 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337656/Blue-Dress-3-nova-international_fdymcd.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-2-nova-international_n3pllq.jpg"
       ],
+      "images_public_id": [
+        "Blue-Dress-1-nova-international_zrutdh",
+        "Blue-Dress-4-nova-international_weymob",
+        "Blue-Dress-3-nova-international_fdymcd",
+        "Blue-Dress-2-nova-international_n3pllq"
+      ],
       "description": "Classic women's dress available in multiple sizes and colors.",
       "minQty": 1,
       "variants": [
@@ -105,7 +131,8 @@
           "size": "S",
           "price": 99.99,
           "productId": "NovaBPD101S",
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-1-nova-international_zrutdh.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-1-nova-international_zrutdh.jpg",
+          "image_public_id": "Blue-Dress-1-nova-international_zrutdh"
         },
         {
           "styleNo": "NovaBPD102M",
@@ -113,7 +140,8 @@
           "size": "M",
           "price": 110.99,
           "productId": "NovaBPD102M",
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-1-nova-international_zrutdh.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-1-nova-international_zrutdh.jpg",
+          "image_public_id": "Blue-Dress-1-nova-international_zrutdh"
         },
         {
           "styleNo": "NovaBPD103L",
@@ -121,7 +149,8 @@
           "size": "L",
           "price": 120.99,
           "productId": "NovaBPD103L",
-          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-1-nova-international_zrutdh.jpg"
+          "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-1-nova-international_zrutdh.jpg",
+          "image_public_id": "Blue-Dress-1-nova-international_zrutdh"
         }
       ]
     },
@@ -138,14 +167,19 @@
       "description": "Elegant designer bags available in multiple colors.",
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg",
-        "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/brown-dress-3-nova-international_lz5hny.jpg"],
+        "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/brown-dress-3-nova-international_lz5hny.jpg"
+      ],
+      "images_public_id": [
+        "purple-clutch_c1uoj9",
+        "brown-dress-3-nova-international_lz5hny"
+      ],
       "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png" },
-        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"},
-        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg" },
-        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg" },
-        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg" },
-        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg" }
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png", "image_public_id": "red-clutch-by-Nova-International-designs-corporation_dsmva3" },
+        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg", "image_public_id": "black-clutch_o8ht3c" },
+        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg", "image_public_id": "silver-clutch_zuo0fp" },
+        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg", "image_public_id": "gold-clutch_aqrxv8" },
+        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg", "image_public_id": "purple-clutch_c1uoj9" },
+        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg", "image_public_id": "champagne-clutch_mwxcdh" }
       ]
     },
     {
@@ -162,13 +196,16 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337653/Blue-Dress-6-nova-international_fpa8xm.jpg"
       ],
+      "images_public_id": [
+        "silver-clutch_zuo0fp"
+      ],
      "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png" },
-        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"},
-        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg" },
-        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg" },
-        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg" },
-        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg" }
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png", "image_public_id": "red-clutch-by-Nova-International-designs-corporation_dsmva3" },
+        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg", "image_public_id": "black-clutch_o8ht3c" },
+        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg", "image_public_id": "silver-clutch_zuo0fp" },
+        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg", "image_public_id": "gold-clutch_aqrxv8" },
+        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg", "image_public_id": "purple-clutch_c1uoj9" },
+        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg", "image_public_id": "champagne-clutch_mwxcdh" }
       ]
     },
     {
@@ -184,13 +221,16 @@
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png"
       ],
+      "images_public_id": [
+        "red-clutch-by-Nova-International-designs-corporation_dsmva3"
+      ],
      "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png" },
-        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"},
-        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg" },
-        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg" },
-        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg" },
-        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg" }
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png", "image_public_id": "red-clutch-by-Nova-International-designs-corporation_dsmva3" },
+        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg", "image_public_id": "black-clutch_o8ht3c" },
+        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg", "image_public_id": "silver-clutch_zuo0fp" },
+        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg", "image_public_id": "gold-clutch_aqrxv8" },
+        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg", "image_public_id": "purple-clutch_c1uoj9" },
+        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg", "image_public_id": "champagne-clutch_mwxcdh" }
       ]
     },
     {
@@ -207,13 +247,17 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337660/white-dress-3-nova-international_ktmyn9.jpg"
       ],
+      "images_public_id": [
+        "champagne-clutch_mwxcdh",
+        "white-dress-3-nova-international_ktmyn9"
+      ],
     "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png" },
-        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"},
-        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg" },
-        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg" },
-        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg" },
-        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg" }
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png", "image_public_id": "red-clutch-by-Nova-International-designs-corporation_dsmva3" },
+        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg", "image_public_id": "black-clutch_o8ht3c" },
+        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg", "image_public_id": "silver-clutch_zuo0fp" },
+        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg", "image_public_id": "gold-clutch_aqrxv8" },
+        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg", "image_public_id": "purple-clutch_c1uoj9" },
+        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg", "image_public_id": "champagne-clutch_mwxcdh" }
       ]
     },
     {
@@ -230,13 +274,17 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337658/brown-dress-4-nova-international_cvgxrd.jpg"
       ],
+      "images_public_id": [
+        "gold-clutch_aqrxv8",
+        "brown-dress-4-nova-international_cvgxrd"
+      ],
     "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png" },
-        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"},
-        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg" },
-        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg" },
-        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg" },
-        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg" }
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png", "image_public_id": "red-clutch-by-Nova-International-designs-corporation_dsmva3" },
+        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg", "image_public_id": "black-clutch_o8ht3c" },
+        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg", "image_public_id": "silver-clutch_zuo0fp" },
+        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg", "image_public_id": "gold-clutch_aqrxv8" },
+        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg", "image_public_id": "purple-clutch_c1uoj9" },
+        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg", "image_public_id": "champagne-clutch_mwxcdh" }
       ]
     },
     { 
@@ -252,13 +300,16 @@
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"
       ],
+      "images_public_id": [
+        "black-clutch_o8ht3c"
+      ],
      "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png" },
-        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg"},
-        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg" },
-        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg" },
-        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg" },
-        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg" }
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/red-clutch-by-Nova-International-designs-corporation_dsmva3.png", "image_public_id": "red-clutch-by-Nova-International-designs-corporation_dsmva3" },
+        { "color": "Black", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346883/black-clutch_o8ht3c.jpg", "image_public_id": "black-clutch_o8ht3c" },
+        { "color": "Silver", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346886/silver-clutch_zuo0fp.jpg", "image_public_id": "silver-clutch_zuo0fp" },
+        { "color": "Gold", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/gold-clutch_aqrxv8.jpg", "image_public_id": "gold-clutch_aqrxv8" },
+        { "color": "Purple", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773346885/purple-clutch_c1uoj9.jpg", "image_public_id": "purple-clutch_c1uoj9" },
+        { "color": "Champagne", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773347089/champagne-clutch_mwxcdh.jpg", "image_public_id": "champagne-clutch_mwxcdh" }
       ]
     },
 
@@ -277,6 +328,12 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337656/Blue-Dress-5-nova-international_yannvz.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337654/Blue-Dress-4-nova-international_weymob.jpg",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337658/white-dress-4-nova-international_u7ucqo.jpg"
+      ],
+      "images_public_id": [
+        "jute_Bag-NovaInternationalDesigns_tgz0yh",
+        "Blue-Dress-5-nova-international_yannvz",
+        "Blue-Dress-4-nova-international_weymob",
+        "white-dress-4-nova-international_u7ucqo"
       ]
     },
 
@@ -291,7 +348,11 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-by-Nova-International-designs-corporation_nlwiko.png",
-        "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-2-by-Nova-International-designs-corporation_rdi86f.png"]
+        "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-2-by-Nova-International-designs-corporation_rdi86f.png"],
+      "images_public_id": [
+        "T2-by-Nova-International-designs-corporation_nlwiko",
+        "T2-2-by-Nova-International-designs-corporation_rdi86f"
+      ]
     },
     {
       "styleNo": "NOVAT2-101",
@@ -304,7 +365,11 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-2-by-Nova-International-designs-corporation_rdi86f.png",
-        "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-by-Nova-International-designs-corporation_nlwiko.png"]
+        "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-by-Nova-International-designs-corporation_nlwiko.png"],
+      "images_public_id": [
+        "T2-2-by-Nova-International-designs-corporation_rdi86f",
+        "T2-by-Nova-International-designs-corporation_nlwiko"
+      ]
     },
     {
       "styleNo": "NOVAT2-101",
@@ -317,7 +382,11 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-2-by-Nova-International-designs-corporation_rdi86f.png",
-        "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-by-Nova-International-designs-corporation_nlwiko.png"]
+        "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/T2-by-Nova-International-designs-corporation_nlwiko.png"],
+      "images_public_id": [
+        "T2-2-by-Nova-International-designs-corporation_rdi86f",
+        "T2-by-Nova-International-designs-corporation_nlwiko"
+      ]
     },
     {
       "styleNo": "NOVAVS-102",
@@ -331,6 +400,9 @@
       "minQty": 1,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj.png"
+      ],
+      "images_public_id": [
+        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
       ]
     },
     {
@@ -345,6 +417,9 @@
       "minQty": 1,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj.png"
+      ],
+      "images_public_id": [
+        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
       ]
     },
     {
@@ -359,6 +434,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj.png"
+      ],
+      "images_public_id": [
+        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
       ]
     },
     {
@@ -373,6 +451,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj.png"
+      ],
+      "images_public_id": [
+        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
       ]
     },
     {
@@ -387,6 +468,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/digital-photoframe-2-by-Nova-International-designs-corporation_xj1d1g.png"
+      ],
+      "images_public_id": [
+        "digital-photoframe-2-by-Nova-International-designs-corporation_xj1d1g"
       ]
     },
     {
@@ -401,6 +485,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/digital-photoframe-by-Nova-International-designs-corporation_ct2zvn.png"
+      ],
+      "images_public_id": [
+        "digital-photoframe-by-Nova-International-designs-corporation_ct2zvn"
       ]
     },
     {
@@ -415,6 +502,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/campfire-light-by-Nova-International-designs-corporation_pewbmr.png"
+      ],
+      "images_public_id": [
+        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
       ]
     },
     {
@@ -429,6 +519,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/campfire-light-by-Nova-International-designs-corporation_pewbmr.png"
+      ],
+      "images_public_id": [
+        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
       ]
     },
     {
@@ -443,6 +536,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/campfire-light-by-Nova-International-designs-corporation_pewbmr.png"
+      ],
+      "images_public_id": [
+        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
       ]
     },
     {
@@ -457,6 +553,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1764974490/campfire-light-by-Nova-International-designs-corporation_pewbmr.png"
+      ],
+      "images_public_id": [
+        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
       ]
     },
     {
@@ -472,6 +571,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337656/DSC_5776_wuzpk5.jpg"
+      ],
+      "images_public_id": [
+        "DSC_5776_wuzpk5"
       ]
     },
     {
@@ -487,6 +589,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337656/DSC_5776_wuzpk5.jpg"
+      ],
+      "images_public_id": [
+        "DSC_5776_wuzpk5"
       ]
     },
     {
@@ -502,6 +607,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773337656/DSC_5776_wuzpk5.jpg"
+      ],
+      "images_public_id": [
+        "DSC_5776_wuzpk5"
       ]
     },
 
@@ -518,6 +626,9 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1770925714/Baby-monitor-pink_kvkpev.jpg"
+      ],
+      "images_public_id": [
+        "Baby-monitor-pink_kvkpev"
       ]
     },
     {
@@ -537,9 +648,15 @@
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773423507/img2_hlblae.png",
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773423507/img_ogpwrw.png"
       ],
+      "images_public_id": [
+        "chura-box-closed-logo_njfkw6",
+        "chura-box_u6pwvd",
+        "img2_hlblae",
+        "img_ogpwrw"
+      ],
       "variants": [
-        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773423508/chura-box-closed-logo_njfkw6.png" },
-        { "color": "White", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773423507/chura-box_u6pwvd.png"}
+        { "color": "Red", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773423508/chura-box-closed-logo_njfkw6.png", "image_public_id": "chura-box-closed-logo_njfkw6" },
+        { "color": "White", "image": "https://res.cloudinary.com/djgz1kays/image/upload/v1773423507/chura-box_u6pwvd.png", "image_public_id": "chura-box_u6pwvd" }
       ]
     },
     {
@@ -554,6 +671,11 @@
       "minQty": 200,
       "images": [
         "https://res.cloudinary.com/djgz1kays/image/upload/v1773426310/choclate3-4-final_km4kzg.jpg"
+      ],
+      "images_public_id": [
+        "choclate3-4-final_km4kzg"
       ]
     }
   ] 
+
+  export default products;

@@ -7,10 +7,10 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     await sendEmail("shila@novainternationaldesigns.com", "Test Resend Email", "<p>Hello from Resend!</p>");
-    res.send("✅ Email sent successfully!");
+    res.send(" Email sent successfully!");
   } catch (err) {
     console.error(err);
-    res.status(500).send("❌ Email failed: " + err.message);
+    res.status(500).send(" Email failed: " + err.message);
   }
 });
 

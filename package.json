@@ -14,6 +14,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "axios": "^1.13.6",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.2",
@@ -35,5 +36,13 @@
     "resend": "^6.9.3",
     "slugify": "^1.6.6",
     "stripe": "^20.4.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NovaInternationalDesigns/novainternational-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NovaInternationalDesigns/novainternational-backend/issues"
+  },
+  "homepage": "https://github.com/NovaInternationalDesigns/novainternational-backend#readme"
 }
