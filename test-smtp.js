@@ -1,12 +1,17 @@
-import { sendEmail } from './utils/sendEmail.js';
+import { sendEmail } from "./utils/sendEmail.js";
 
 (async () => {
-    const success = await sendEmail(
-        'shila@novainternationaldesigns.com',
-        'Test Email',
-        '<h1>This is a test from Resend - shila</h1>',
-        true
+  try {
+    const to = process.env.RESEND_FROM_EMAIL;
+
+    const response = await sendEmail(
+      to,
+      "Test Email",
+      "<h1>This is a test from Resend - Nova International Designs.</h1>"
     );
 
-    console.log(`✅ Email sent to ${to}: ${response.data?.id}`);
+    console.log(`✅ Email sent to ${to}: ${response?.id}`);
+  } catch (err) {
+    console.error("❌ Email failed:", err.message);
+  }
 })();
