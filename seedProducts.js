@@ -284,47 +284,19 @@
 
     {
       "styleNo": "NOVAT2-101",
-      "name": "T2 Robot",
+      "name": "NOVA T2 Robot",
       "productId": "NOVAT2-101",
       "price": 745.99,
       "description": "Educational Robot for kids with customized apps for educational learning for kids\nHelpful with Stem Education and Voice Commands and has parental control for kids \nAvailable for Shipping anywhere in USA",
       "category": "Electronics",
-      "slug": "t2",
+      "slug": "nova-t2-robot",
       "minQty": 200,
       "images_public_id": [
         "T2-by-Nova-International-designs-corporation_nlwiko",
         "T2-2-by-Nova-International-designs-corporation_rdi86f"
       ]
     },
-    {
-      "styleNo": "NOVAT2-101",
-      "name": "Kids Robot",
-      "productId": "NOVAT2-101",
-      "price": 745.99,
-      "description": "Educational Robot for kids with customized apps for educational learning for kids\nHelpful with Stem Education and Voice Commands and has parental control for kids \nAvailable for Shipping anywhere in USA",
-      "category": "Electronics",
-      "slug": "kids-robot",
-      "minQty": 200,
-      "images_public_id": [
-        "T2-2-by-Nova-International-designs-corporation_rdi86f",
-        "T2-by-Nova-International-designs-corporation_nlwiko"
-      ]
-    },
-    {
-      "styleNo": "NOVAT2-101",
-      "name": "Technologically Advanced Robots",
-      "productId": "NOVAT2-101",
-      "price": 745.99,
-      "description": "Educational Robot for kids with customized apps for educational learning for kids\nHelpful with Stem Education and Voice Commands and has parental control for kids \nAvailable for Shipping anywhere in USA",
-      "category": "Electronics",
-      "slug": "technologically-advanced-robots",
-      "minQty": 200,
-      "images_public_id": [
-        "T2-2-by-Nova-International-designs-corporation_rdi86f",
-        "T2-by-Nova-International-designs-corporation_nlwiko"
-      ]
-    },
-    {
+      {
       "styleNo": "NOVAVS-102",
       "name": "Vacuum Sealing Machine",
       "productId": "NOVAVS-102",
@@ -338,48 +310,7 @@
         "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
       ]
     },
-    {
-      "styleNo": "NOVAVS-102",
-      "name": "Zip Lock Vacuum Sealers",
-      "productId": "NOVAVS-102",
-      "price": 125.99,
-      "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
-      "category": "Electronics",
-      "subcategory": "vacuum-sealing-machine",
-      "slug": "zip-lock-vacuum-sealers",
-      "minQty": 1,
-      "images_public_id": [
-        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
-      ]
-    },
-    {
-      "styleNo": "NOVAVS-102",
-      "name": "Kitchenware Vacuum Sealers",
-      "productId": "NOVAVS-102",
-      "price": 125.99,
-      "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
-      "category": "Electronics",
-      "subcategory": "vacuum-sealing-machine",
-      "slug": "kitchenware-vacuum-sealers",
-      "minQty": 200,
-      "images_public_id": [
-        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
-      ]
-    },
-    {
-      "styleNo": "NOVAVS-102",
-      "name": "Technologically Advance Vacuum Sealers",
-      "productId": "NOVAVS-102",
-      "price": 125.99,
-      "description": "Vacuum sealing mechanism for plastic bags and has very Efficient and high quality sealing mechanism \nKeep any kind of food healthy, nutritious and safer to eat for you and  your family",
-      "category": "Electronics",
-      "subcategory": "vacuum-sealing-machine",
-      "slug": "technologically-advance-vacuum-sealers",
-      "minQty": 200,
-      "images_public_id": [
-        "vaccum-sealing-machine-by-Nova-International-Designs-Corporation_cqc6rj"
-      ]
-    },
+    
     {
       "styleNo": "NOVADPF-105",
       "name": "Digital Photo Frame",
@@ -394,23 +325,10 @@
         "digital-photoframe-2-by-Nova-International-designs-corporation_xj1d1g"
       ]
     },
-    {
-      "styleNo": "NOVADPF-105", 
-      "name": "Digital Photo Frame",
-      "productId": "NOVADPF-105",
-      "price": 225.99,
-      "description": "Interactive Digital photo frame where you can upload \nYour good times and moments with loved ones",
-      "category": "Electronics",
-      "subcategory": "digital-photo-frame",
-      "slug": "digital-photo-frame",
-      "minQty": 200,
-      "images_public_id": [
-        "digital-photoframe-by-Nova-International-designs-corporation_ct2zvn"
-      ]
-    },
+    
     {
       "styleNo": "NOVACF-104",
-      "name": "Campfire Light",
+      "name": "Campfire Light and Musical Sperakers",
       "productId": "NOVACF-104",
       "price": 150.99,
       "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
@@ -422,48 +340,7 @@
         "campfire-light-by-Nova-International-designs-corporation_pewbmr"
       ]
     },
-    {
-      "styleNo": "NOVACF-104",
-      "name": "Bluetooth & Wireless Speakers",
-      "productId": "NOVACF-104",
-      "price": 150.99,
-      "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
-      "category": "Electronics",
-      "subcategory": "campfire-light",
-      "slug": "bluetooth-wireless-speakers",
-      "minQty": 200,
-      "images_public_id": [
-        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
-      ]
-    },
-    {
-      "styleNo": "NOVACF-104",
-      "name": "Campfire Bluetooth Speakers",
-      "productId": "NOVACF-104",
-      "price": 150.99,
-      "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
-      "category": "Electronics",
-      "subcategory": "campfire-light",
-      "slug": "campfire-bluetooth-speakers",
-      "minQty": 200,
-      "images_public_id": [
-        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
-      ]
-    },
-    {
-      "styleNo": "NOVACF-104",
-      "name": "Technologically Advanced Bluetooth Speakers",
-      "productId": "NOVACF-104",
-      "price": 150.99,
-      "description": " High quality lights and sound effect and Good connecting ability \nCreatively Designed and Best option for outdoor camping with family and loved ones ",
-      "category": "Electronics",
-      "subcategory": "campfire-light",
-      "slug": "technologically-advanced-bluetooth-speakers",
-      "minQty": 200,
-      "images_public_id": [
-        "campfire-light-by-Nova-International-designs-corporation_pewbmr"
-      ]
-    },
+   
     {
       "styleNo": "NOVAFN-106",
       "name": "Bladeless Fan",
@@ -479,37 +356,7 @@
         "DSC_5776_wuzpk5"
       ]
     },
-    {
-      "styleNo": "NOVAFN-106",
-      "name": "Technologically Advanced Fans",
-      "productId": "NOVAFN-106",
-      "price": 1500.99,
-      "color": ["White", "Black", "Beige"],
-      "description": "Modern designs with light and Musical effects\nNo Blades",
-      "category": "Electronics",
-      "subcategory": "bladeless-fan",
-      "slug": "technologically-advanced-fans",
-      "minQty": 200,
-      "images_public_id": [
-        "DSC_5776_wuzpk5"
-      ]
-    },
-    {
-      "styleNo": "NOVAFN-106",
-      "name": "Musical Fans",
-      "productId": "NOVAFN-106",
-      "price": 1500.99,
-      "color": ["White", "Black", "Beige"],
-      "description": "Modern designs with light and Musical effects\nNo Blades",
-      "category": "Electronics",
-      "subcategory": "bladeless-fan",
-      "slug": "musical-fans",
-      "minQty": 200,
-      "images_public_id": [
-        "DSC_5776_wuzpk5"
-      ]
-    },
-
+    
     {
       "styleNo": "NOVABM-103",
       "name": "Baby Monitor",
@@ -526,15 +373,15 @@
       ]
     },
     {
-      "styleNo": "NOVCK",
-      "name": "Churas and Kaliras",
-      "productId": "NOVCK",
-      "price": 99.99,
+      "styleNo": "NovaWGB1006",
+      "name": "Wedding Gift Box",
+      "productId": "NovaWGB1006",
+      "price": 520.99,
       "color": ["Red", "White"],
-      "description": "Beautifully designed churas and kaliras for brides to be. Available in multiple colors and sizes.",
+      "description": "Beautifully designed wedding gift boxes for brides to be. Available in multiple colors and sizes.",
       "category": "wedding-gifts",
-      "subcategory": "churas-and-kaliras",
-      "slug": "churas-and-kaliras",
+      "subcategory": "wedding-gift-box",
+      "slug": "wedding-gift-box",
       "minQty": 200,
       "images_public_id": [
         "chura-box-closed-logo_njfkw6",
@@ -548,14 +395,28 @@
       ]
     },
     {
-      "styleNo": "NOVCHOC",
-      "name": "Nova Chocolate",
-      "productId": "NOVCHOC",
+      "styleNo": "NovaCHB1007",
+      "name": "Nova Chocolate Box",
+      "productId": "NovaCHB1007",
       "price": 99.99,
       "description": "Delicious Nova Chocolates are available.",
       "category": "nova-chocolates",
-      "subcategory": "milk-bar",
-      "slug": "milk-bar",
+      "subcategory": "chocolate-box",
+      "slug": "chocolate-box",
+      "minQty": 200,
+      "images_public_id": [
+        "choclate3-4-final_km4kzg"
+      ]
+    },
+    {
+      "styleNo": "NovaCHB1009",
+      "name": "Nova Chocolate Bar",
+      "productId": "NovaCHB1009",
+      "price": 9.99,
+      "description": "Delicious Nova Chocolates are available.",
+      "category": "nova-chocolates",
+      "subcategory": "Chocolate-bar",
+      "slug": "Chocolate-bar",
       "minQty": 200,
       "images_public_id": [
         "choclate3-4-final_km4kzg"

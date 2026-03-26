@@ -15,7 +15,7 @@ const itemSchema = new mongoose.Schema({
 const purchaseOrderSchema = new mongoose.Schema(
   {
     // Unique purchase order identifier shared across draft/order/confirmation
-    purchaseOrderId: { type: String, required: true, unique: true },
+    purchaseOrderId: { type: String, required: true },
 
     // Owner info (polymorphic: "User" or "Guest")
     ownerType: { type: String, enum: ["User", "Guest"], required: true },
@@ -75,6 +75,7 @@ const purchaseOrderSchema = new mongoose.Schema(
   { timestamps: true } // automatically adds createdAt and updatedAt
 );
 
+purchaseOrderSchema.index({ purchaseOrderId: 1 }, { unique: true, sparse: true });
 purchaseOrderSchema.index({ stripeSessionId: 1 }, { unique: true, sparse: true });
 
 // Export the model
