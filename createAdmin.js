@@ -12,7 +12,7 @@ const createAdminUser = async () => {
     await connectDB();
 
     const adminEmail = "admin@novainternationaldesigns.com";
-    const adminPassword = "12345"; // Change this to your desired password
+    const adminPassword = "123456"; // Change this to your desired password
     const adminName = "Admin User";
 
     // Check if admin already exists
