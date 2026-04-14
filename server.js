@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import connectDB from "./config/db.js";
 import Stripe from "stripe";
+import dotenv from "dotenv";
 
 // Routes
 import authRoutes from "./routes/auth/index.js";
@@ -21,35 +21,51 @@ import ordersRoutes from "./routes/orders.js";
 import debugRoutes from "./routes/debug.js";
 import emailTest from "./emailTest.js";
 
-// LOAD ENV FIRST (IMPORTANT)
-const env = process.env.NODE_ENV;
-
-if (env === "production") {
-  dotenv.config({ path: ".env.production" });
-} else if (env === "test") {
-  dotenv.config({ path: ".env.test" });
-} else {
+// =====================
+// ENV LOADING (FIXED)
+// =====================
+if (process.env.NODE_ENV !== "production") {
   dotenv.config();
+}
+
+const env = process.env.NODE_ENV;
+const isProdLike = env === "production" || process.env.RENDER === "true";
+
+// =====================
+// STRIPE (SAFE INIT)
+// =====================
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("Missing STRIPE_SECRET_KEY");
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// =====================
+// APP INIT
+// =====================
 const app = express();
 
-const isProdLike = env === "production" || process.env.RENDER === "true";
-
 if (isProdLike) {
-  // Required on Render/Heroku-style proxies so secure cookies are set correctly.
   app.set("trust proxy", 1);
 }
 
-// CONNECT DATABASE
+// =====================
+// DATABASE
+// =====================
+if (!process.env.MONGO_URI) {
+  throw new Error("Missing MONGO_URI");
+}
+
 connectDB();
 
+// =====================
 // STRIPE WEBHOOK (MUST BE FIRST)
+// =====================
 app.use("/api/webhook", webhookRoutes);
 
+// =====================
 // CORS
+// =====================
 const envOrigins = (process.env.CORS_ALLOWED_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
@@ -72,7 +88,7 @@ const allowOrigin = (origin) => {
 
   if (allowedOrigins.map(normalizeOrigin).includes(clean)) return true;
 
-  // Allow any Netlify preview/testing subdomain for deployment parity.
+  // Allow Netlify preview domains
   if (/^https:\/\/[a-z0-9-]+\.netlify\.app$/i.test(clean)) return true;
 
   return false;
@@ -81,16 +97,19 @@ const allowOrigin = (origin) => {
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow Postman, server-to-server requests
+      if (!origin) return callback(null, true);
       if (allowOrigin(origin)) return callback(null, true);
+
       console.log("Blocked by CORS:", origin);
       callback(new Error("Not allowed by CORS"));
     },
-    credentials: true, // needed if using cookies/session
+    credentials: true,
   })
 );
 
+// =====================
 // SESSION
+// =====================
 app.use(
   session({
     name: "nova.sid",
@@ -107,10 +126,14 @@ app.use(
   })
 );
 
-// JSON PARSER (AFTER WEBHOOK)
+// =====================
+// MIDDLEWARE
+// =====================
 app.use(express.json());
 
+// =====================
 // ROUTES
+// =====================
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/products", productRoutes);
@@ -123,7 +146,9 @@ app.use("/api/signup", signupRouter);
 app.use("/api/debug", debugRoutes);
 app.use("/api/emailTest", emailTest);
 
+// =====================
 // HEALTH CHECK
+// =====================
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
@@ -131,17 +156,17 @@ app.get("/health", (req, res) => {
   });
 });
 
-
-//ROOT
+// =====================
+// ROOT
+// =====================
 app.get("/", (req, res) => {
   res.send("Backend is running...");
 });
 
-
-//SERVER
+// =====================
+// SERVER START
+// =====================
 const PORT = process.env.PORT || 5000;
-
-console.log("SMTP_USER:", process.env.SMTP_USER);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
