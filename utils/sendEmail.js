@@ -1,4 +1,4 @@
-// sendEmail.js (Resend only - clean version)
+// sendEmail.js (Resend only - stable production version)
 
 import { Resend } from "resend";
 import dotenv from "dotenv";
@@ -8,12 +8,18 @@ import Guest from "../models/Guest.js";
 
 dotenv.config();
 
-// ✅ Validate API key early
-if (!process.env.RESEND_API_KEY) {
-  console.error("❌ RESEND_API_KEY is missing in .env");
-}
+/**
+ * Get Resend instance safely at runtime
+ */
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+  if (!key) {
+    throw new Error("RESEND_API_KEY is missing in environment variables");
+  }
+
+  return new Resend(key);
+}
 
 /**
  * Resolve user name
@@ -38,7 +44,7 @@ async function userName(orderData) {
         record = await Guest.findById(id).select("name").lean();
       }
 
-      if (record?.name) return record.name.trim();
+      if (record?.name?.trim()) return record.name.trim();
     }
   } catch (err) {
     console.warn("Name lookup failed:", err.message);
@@ -53,17 +59,14 @@ async function userName(orderData) {
  * Generic email sender
  */
 export async function sendEmail(to, subject, content, isHtml = true) {
-  if (!process.env.RESEND_API_KEY) {
-    console.error("❌ Cannot send email: missing RESEND_API_KEY");
-    return false;
-  }
-
   if (!to) {
     console.warn("sendEmail: missing recipient");
     return false;
   }
 
   try {
+    const resend = getResend();
+
     const response = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL,
       to,
@@ -93,11 +96,7 @@ export async function sendPurchaseOrderConfirmation(email, orderData) {
     <p>Order ID: <b>${orderData.purchaseOrderId}</b></p>
   `;
 
-  return sendEmail(
-    email,
-    `Purchase Order Confirmation - ${orderData.purchaseOrderId}`,
-    html
-  );
+  return sendEmail(email, `Purchase Order Confirmation - ${orderData.purchaseOrderId}`, html);
 }
 
 /**
@@ -109,11 +108,7 @@ export async function sendPaymentConfirmationEmail(email, paymentData) {
     <p>Total: $${(paymentData.totalAmount || 0).toFixed(2)}</p>
   `;
 
-  return sendEmail(
-    email,
-    `Payment Confirmation - ${paymentData.purchaseOrderId}`,
-    html
-  );
+  return sendEmail(email, `Payment Confirmation - ${paymentData.purchaseOrderId}`, html);
 }
 
 /**
@@ -133,11 +128,5 @@ export async function sendAdminOrderNotification(orderData) {
     <p>Total: $${(orderData.totalAmount || 0).toFixed(2)}</p>
   `;
 
-  return sendEmail(
-    adminEmail,
-    `New Order - ${orderData.purchaseOrderId}`,
-    html
-  );
+  return sendEmail(adminEmail, `New Order - ${orderData.purchaseOrderId}`, html);
 }
-
-export default sendEmail;
