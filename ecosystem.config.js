@@ -1,14 +1,30 @@
 module.exports = {
   apps: [
+    // ======================
+    // 🟢 DEVELOPMENT
+    // ======================
+    {
+      name: "nova-backend-dev",
+      script: "server.js",
+      cwd: "/home/m4x6rl78j7mz/nova_backend",
+      watch: true,
+      env: {
+        NODE_ENV: "development",
+        PORT: 5000
+      }
+    },
+
+    // ======================
+    // 🔵 PRODUCTION
+    // ======================
     {
       name: "nova-backend",
       script: "server.js",
       cwd: "/home/m4x6rl78j7mz/nova_backend",
+      watch: false,
       env: {
         NODE_ENV: "production",
-        RESEND_API_KEY: "re_HZAGhRGo_CXncjksGWTH5ScqT7S4qBSpc",
-        RESEND_FROM_EMAIL: "shila@novainternationaldesigns.com",
-        ADMIN_EMAIL: "admin@novainternationaldesigns.com"
+        PORT: 5000
       }
     }
   ]
