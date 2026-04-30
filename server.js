@@ -109,10 +109,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/purchase-order", purchaseOrderRoute);
-app.use("/api/purchaseOrderDraft", purchaseOrderDraftRoutes);
+app.use("/api/purchaseOrderDraft", purchaseOrderDraftRoutes); // adding this for easier fetching of draft by owner
 app.use("/api/guests", guestRoutes);
 app.use("/api/orders", ordersRoutes);
-app.use("/api/payment", paymentRoutes);
+app.use("/api/payment", paymentRoutes); // adding this for easier fetching of draft by owner
 app.use("/api/signup", signupRouter);
 app.use("/api/debug", debugRoutes);
 app.use("/api/emailTest", emailTest);
