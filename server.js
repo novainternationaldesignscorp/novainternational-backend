@@ -117,6 +117,7 @@ app.use("/api/signup", signupRouter);
 app.use("/api/debug", debugRoutes);
 app.use("/api/emailTest", emailTest);
 
+
 // HEALTH
 app.get("/health", (req, res) => {
   res.json({
