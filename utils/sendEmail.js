@@ -165,7 +165,7 @@ export async function sendAdminOrderNotification(orderData) {
     .join("");
 
   const html = `
-    <h2> New Order Received</h2>
+    <h2>New Purchase Order Received</h2>
 
     <p><b>Purchase Order ID:</b> ${orderData.purchaseOrderId}</p>
     <p><b>Total:</b> $${(orderData.totalAmount || 0).toFixed(2)}</p>
@@ -192,7 +192,7 @@ export async function sendAdminOrderNotification(orderData) {
 
   return sendEmail(
     adminEmail,
-    `New Order Received - ${orderData.purchaseOrderId}`,
+    `Received New Purchase Order - ${orderData.purchaseOrderId}`,
     html
   );
 }
