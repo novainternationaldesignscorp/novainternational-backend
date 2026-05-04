@@ -132,7 +132,16 @@ export async function sendPurchaseOrderConfirmation(email, orderData) {
       </tbody>
     </table>
 
-    <h3>Total Amount: $${(orderData.totalAmount || 0).toFixed(2)}</h3>
+    <h3>Order Summary</h3>
+
+    <p><b>Subtotal:</b> $${(orderData.subtotal || 0).toFixed(2)}</p>
+    <p><b>Shipping:</b> $${(orderData.shippingCost || 0).toFixed(2)}</p>
+    <p><b>Tax:</b> $${(orderData.estimatedTax || 0).toFixed(2)}</p>
+    <p><b>Processing Fee:</b> $${(orderData.Processing_Fee || 0).toFixed(2)}</p>
+
+    <hr/>
+
+    <h2>Total Paid: $${(orderData.totalAmount || 0).toFixed(2)}</h2>
   `;
 
   return sendEmail(
@@ -168,6 +177,13 @@ export async function sendAdminOrderNotification(orderData) {
     <h2>New Purchase Order Received</h2>
 
     <p><b>Purchase Order ID:</b> ${orderData.purchaseOrderId}</p>
+    <p><b>Subtotal:</b> $${(orderData.subtotal || 0).toFixed(2)}</p>
+    <p><b>Shipping:</b> $${(orderData.shippingCost || 0).toFixed(2)}</p>
+    <p><b>Tax:</b> $${(orderData.estimatedTax || 0).toFixed(2)}</p>
+    <p><b>Processing Fee:</b> $${(orderData.Processing_Fee || 0).toFixed(2)}</p>
+
+    <hr/>
+
     <p><b>Total:</b> $${(orderData.totalAmount || 0).toFixed(2)}</p>
 
     <table border="1" cellpadding="6" cellspacing="0">
