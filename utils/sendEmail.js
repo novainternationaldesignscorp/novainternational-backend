@@ -88,60 +88,111 @@ export async function sendEmail(to, subject, content, isHtml = true) {
 }
 
 // ==============================
-// Purchase confirmation
+// Purchase confirmation (UPDATED)
 // ==============================
 export async function sendPurchaseOrderConfirmation(email, orderData) {
   const customerName = await userName(orderData);
 
+  const itemsHtml = (orderData.items || [])
+    .map(
+      (item) => `
+      <tr>
+        <td>${item.styleNo || "-"}</td>
+        <td>${item.description || "Product"}</td>
+        <td>${item.color || "-"}</td>
+        <td>${item.size || "-"}</td>
+        <td>${item.qty || 1}</td>
+        <td>$${(item.price || 0).toFixed(2)}</td>
+        <td>$${(item.total || item.qty * item.price || 0).toFixed(2)}</td>
+      </tr>
+    `
+    )
+    .join("");
+
   const html = `
     <h2>Thank you for your order!</h2>
     <p>Hi ${customerName}</p>
-    <p>Order ID: <b>${orderData.purchaseOrderId}</b></p>
+
+    <p><b>Purchase Order ID:</b> ${orderData.purchaseOrderId}</p>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Style No</th>
+          <th>Product</th>
+          <th>Color</th>
+          <th>Size</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsHtml}
+      </tbody>
+    </table>
+
+    <h3>Total Amount: $${(orderData.totalAmount || 0).toFixed(2)}</h3>
   `;
 
   return sendEmail(
     email,
-    `Purchase Order Confirmation - ${orderData.purchaseOrderId}`,
+    `Order Confirmation - ${orderData.purchaseOrderId}`,
     html
   );
 }
 
 // ==============================
-// Payment confirmation
-// ==============================
-export async function sendPaymentConfirmationEmail(email, paymentData) {
-  const html = `
-    <p>Payment received for order <b>${paymentData.purchaseOrderId}</b></p>
-    <p>Total: $${(paymentData.totalAmount || 0).toFixed(2)}</p>
-  `;
-
-  return sendEmail(
-    email,
-    `Payment Confirmation - ${paymentData.purchaseOrderId}`,
-    html
-  );
-}
-
-// ==============================
-// Admin notification
+// Admin notification (UPDATED)
 // ==============================
 export async function sendAdminOrderNotification(orderData) {
   const adminEmail = process.env.ADMIN_EMAIL || FROM_EMAIL;
 
-  if (!adminEmail) {
-    console.warn("Admin email missing");
-    return false;
-  }
+  const itemsHtml = (orderData.items || [])
+    .map(
+      (item) => `
+      <tr>
+        <td>${item.styleNo || "-"}</td>
+        <td>${item.description || "Product"}</td>
+        <td>${item.color || "-"}</td>
+        <td>${item.size || "-"}</td>
+        <td>${item.qty || 1}</td>
+        <td>$${(item.price || 0).toFixed(2)}</td>
+        <td>$${(item.total || item.qty * item.price || 0).toFixed(2)}</td>
+      </tr>
+    `
+    )
+    .join("");
 
   const html = `
-    <h3>New Order</h3>
-    <p>ID: ${orderData.purchaseOrderId}</p>
-    <p>Total: $${(orderData.totalAmount || 0).toFixed(2)}</p>
+    <h2>🛒 New Order Received</h2>
+
+    <p><b>Purchase Order ID:</b> ${orderData.purchaseOrderId}</p>
+    <p><b>Total:</b> $${(orderData.totalAmount || 0).toFixed(2)}</p>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Style No</th>
+          <th>Product</th>
+          <th>Color</th>
+          <th>Size</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsHtml}
+      </tbody>
+    </table>
+
+    <p>Please process this order ASAP.</p>
   `;
 
   return sendEmail(
     adminEmail,
-    `New Order - ${orderData.purchaseOrderId}`,
+    `New Order Received - ${orderData.purchaseOrderId}`,
     html
   );
 }
